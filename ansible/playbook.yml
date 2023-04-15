@@ -1,0 +1,26 @@
+---
+- hosts: target_node
+  tasks:
+    - name: Install git
+      become: yes
+      yum:
+        name: git
+        state: latest
+        lock_timeout: 180
+
+    - name: Check if Nodejs Yum repo file exists
+      stat:
+        path: /etc/yum.repos.d/nodesource-el7.repo
+      register: nodesource_repo
+
+    - name: Setup Yum repo for Nodejs
+      shell: |
+        curl -fsSL https://rpm.nodesource.com/setup_16.x | sudo bash -
+      when: not nodesource_repo.stat.exists
+      changed_when: false
+
+    - name: Install nodejs
+      become: yes
+      yum:
+        name: nodejs
+        state: latest
