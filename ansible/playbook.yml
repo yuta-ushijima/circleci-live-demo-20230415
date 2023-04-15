@@ -15,7 +15,7 @@
 
     - name: Setup Yum repo for Nodejs
       command: |
-        curl -fsSL https://rpm.nodesource.com/setup_16.x | sudo bash -
+        curl -fsSL https://rpm.nodesource.com/setup_16.x | sudo -E bash -
       when: not nodesource_repo.stat.exists
       changed_when: false
 
